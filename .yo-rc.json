@@ -1,0 +1,11 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "isCreatingSolution": false,
+    "environment": "onprem19",
+    "version": "1.10.0",
+    "libraryName": "spsuperedit",
+    "libraryId": "f171eaa8-5378-4f4f-b9a6-4fe59f0343eb",
+    "packageManager": "npm",
+    "componentType": "webpart"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "editcommand-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/editcommand/EditcommandCommandSet.js",
+          "manifest": "./src/extensions/editcommand/EditcommandCommandSet.manifest.json"
+        }
+      ]
+    },
+    "spsuperedit-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/spsuperedit/SpsupereditWebPart.js",
+          "manifest": "./src/webparts/spsuperedit/SpsupereditWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "EditcommandCommandSetStrings": "lib/extensions/editcommand/loc/{locale}.js",
+    "SpsupereditWebPartStrings": "lib/webparts/spsuperedit/loc/{locale}.js"
+  }
+}
