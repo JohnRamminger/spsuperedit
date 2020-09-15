@@ -2,7 +2,7 @@
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
     <ClientSideComponentInstance
         Title="Editcommand"
-        Location="ClientSideExtension.ListViewCommandSet.CommandBar"
+        Location="ClientSideExtension.ListViewCommandSet"
         ListTemplateId="100"
         Properties="{&quot;sampleTextOne&quot;:&quot;One item is selected in the list.&quot;, &quot;sampleTextTwo&quot;:&quot;This command is always visible.&quot;}"
         ComponentId="c8d24451-7160-42ae-b980-4f8b6160686b" />

@@ -9,6 +9,7 @@ import {
 import { Dialog } from '@microsoft/sp-dialog';
 
 import * as strings from 'EditcommandCommandSetStrings';
+import { PopupWindowPosition } from '@microsoft/sp-webpart-base/lib/propertyPane/propertyPaneFields/propertyPaneLink/IPropertyPaneLink';
 
 /**
  * If your command set uses the ClientSideComponentProperties JSON input,
@@ -38,16 +39,14 @@ export default class EditcommandCommandSet extends BaseListViewCommandSet<IEditc
       // This command should be hidden unless exactly one row is selected.
       compareOneCommand.visible = event.selectedRows.length === 1;
     }
+
   }
 
   @override
   public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
     switch (event.itemId) {
       case 'COMMAND_1':
-        Dialog.alert(`${this.properties.sampleTextOne}`);
-        break;
-      case 'COMMAND_2':
-        Dialog.alert(`${this.properties.sampleTextTwo}`);
+        window.open('https://www.google.com');
         break;
       default:
         throw new Error('Unknown command');

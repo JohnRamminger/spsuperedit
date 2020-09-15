@@ -3,24 +3,29 @@
   "id": "8497e7c8-0b8b-4b51-8323-6bfc185217d7",
   "alias": "SpsupereditWebPart",
   "componentType": "WebPart",
-
   // The "*" signifies that the version should be taken from the package.json
   "version": "*",
   "manifestVersion": 2,
-
   // If true, the component can only be installed on sites where Custom Script is allowed.
   // Components that allow authors to embed arbitrary script code should set this to true.
   // https://support.office.com/en-us/article/Turn-scripting-capabilities-on-or-off-1f2c515f-5d7e-448a-9fd7-835da935584f
   "requiresCustomScript": false,
-
-  "preconfiguredEntries": [{
-    "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Other
-    "group": { "default": "Other" },
-    "title": { "default": "spsuperedit" },
-    "description": { "default": "spsuperedit description" },
-    "officeFabricIconFontName": "Page",
-    "properties": {
-      "description": "spsuperedit"
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Other
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "spsuperedit"
+      },
+      "description": {
+        "default": "spsuperedit description"
+      },
+      "officeFabricIconFontName": "Page",
+      "properties": {
+        "skipFields": "BannerUrl,LinkTitle,LinkTitleNoMenu,ID,ContentType,_CopySource,CheckoutUser,_CheckinComment,LinkFilenameNoMenu,LinkFilename,DocIcon,FileSizeDisplay,ItemChildCount,FolderChildCount,_CommentCount,_LikeCount,AppAuthor,AppEditor,Edit,_UIVersionString,ParentVersionString,ParentLeafName,ComplianceAssetId"
+      }
     }
-  }]
+  ]
 }
