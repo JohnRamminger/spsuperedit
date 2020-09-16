@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { ISPSuperFieldTextProps } from './';
-import { escape } from '@microsoft/sp-lodash-subset';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 export class SPSuperFieldText extends React.Component<ISPSuperFieldTextProps, {}> {

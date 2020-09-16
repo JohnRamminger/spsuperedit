@@ -14,7 +14,9 @@ import * as ReactDOM from 'react-dom';
 import { FieldConfigItem, FieldConfigItemLookup } from '../';
 import styles from './FieldConfigDialog.module.scss';
 import { IFieldConfigProps, IFieldConfigReactState } from './';
-import { MiscFunctions } from '../../services';
+// import { ISPFieldInfo } from '../../../lib/models';
+// import { MiscFunctions } from '../../services';
+// import { ISPFieldInfo } from '../../../lib/models';
 
 class FieldConfigDialogContent extends React.Component<
   IFieldConfigProps,
@@ -26,42 +28,9 @@ class FieldConfigDialogContent extends React.Component<
     this.state = { currentFields: props.fields };
   }
 
-  private showDialog() { }
-
-  private saveSearchItem = (saveitem: ISPSuperField) => {
-    let workItems = this.state.currentFields;
-
-    for (let i = 0; i < workItems.length; i++) {
-      let item = workItems[i];
-      if (item.id === saveitem.id) {
-        workItems[i] = saveitem;
-      }
-    }
-
-    this.setState({ currentFields: workItems });
-  };
-
-  private removeItem = (id: string) => {
-    let updateItems: ISPSuperField[] = [];
-    for (let i: number = 0; i < this.state.currentFields.length; i++) {
-      const item = this.state.currentFields[i];
-      if (item.id !== id) {
-        updateItems.push(item);
-      }
-    }
-    //    this.setState({ currentButtons: updateItems });
-    this.props.submit(updateItems);
-  };
-
-  public componentDidMount() { }
-
-
-
   public render(): JSX.Element {
     const flds: JSX.Element[] = [];
-
     this.state.currentFields.forEach(field => {
-
       switch (field.type) {
         case 'Lookup':
           flds.push(
@@ -118,12 +87,39 @@ class FieldConfigDialogContent extends React.Component<
     );
   }
 
-  private clicked() {
+  // private showDialog() { }
+
+  private saveSearchItem = (saveitem: ISPSuperField) => {
+    const workItems: ISPSuperField[] = this.state.currentFields;
+
+    for (let i: number = 0; i < workItems.length; i++) {
+      const item: ISPSuperField = workItems[i];
+      if (item.id === saveitem.id) {
+        workItems[i] = saveitem;
+      }
+    }
+
+    this.setState({ currentFields: workItems });
+  }
+
+  private removeItem = (id: string) => {
+    const updateItems: ISPSuperField[] = [];
+    for (let i: number = 0; i < this.state.currentFields.length; i++) {
+      const item: ISPSuperField = this.state.currentFields[i];
+      if (item.id !== id) {
+        updateItems.push(item);
+      }
+    }
+    //    this.setState({ currentButtons: updateItems });
+    this.props.submit(updateItems);
+  }
+
+  private clicked(): void {
     this.props.submit(this.state.currentFields);
   }
 
-  @autobind
-  private _onChange(e) { }
+  // @autobind
+  // private _onChange(e) { }
 }
 
 // tslint:disable-next-line: max-classes-per-file
@@ -155,9 +151,6 @@ export class FieldConfigDialog extends BaseDialog {
     super.onAfterClose();
     ReactDOM.unmountComponentAtNode(this.domElement);
   }
-
-  @autobind
-  private _itemSubmit() { }
 
   @autobind
   private _refresh(currentFields: ISPSuperField[]): void {

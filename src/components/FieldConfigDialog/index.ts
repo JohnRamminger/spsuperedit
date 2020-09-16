@@ -1,3 +1,3 @@
-export * from "./FieldConfigDialog";
-export * from "./IFieldConfigReactState";
-export * from "./IFieldConfigProps";
+export * from './FieldConfigDialog';
+export * from './IFieldConfigReactState';
+export * from './IFieldConfigProps';

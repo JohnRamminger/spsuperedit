@@ -1,5 +1,5 @@
-import { ISPSuperField } from "../../models";
-import { WebPartContext } from "@microsoft/sp-webpart-base";
+import { ISPSuperField } from '../../models';
+import { WebPartContext } from '@microsoft/sp-webpart-base';
 
 export interface IFieldConfigProps {
   message: string;

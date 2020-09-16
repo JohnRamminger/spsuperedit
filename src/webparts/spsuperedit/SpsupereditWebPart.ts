@@ -8,13 +8,14 @@ import {
   PropertyPaneButton,
   PropertyPaneButtonType
 } from '@microsoft/sp-webpart-base';
-
-import { PropertyFieldListPicker, PropertyFieldListPickerOrderBy } from '@pnp/spfx-property-controls/lib/PropertyFieldListPicker';
-import * as strings from 'SpsupereditWebPartStrings';
+import {
+  PropertyFieldListPicker,
+  PropertyFieldListPickerOrderBy
+} from '@pnp/spfx-property-controls/lib/PropertyFieldListPicker';
 import { ISPSuperEditProps, SPSuperEdit, FieldConfigDialog } from '../../components';
 import { SvcSuperFields } from '../../services/svcSuperField';
 import { ISPSuperField } from '../../models';
-import { FileFolderShared } from '@pnp/sp';
+import { SPLogging } from '../../../lib/services';
 export interface ISpsupereditWebPartProps {
   listID: string;
   fields: ISPSuperField[];
@@ -44,7 +45,6 @@ export default class SPSuperEditWebPart extends BaseClientSideWebPart<ISpsupered
     return Version.parse('1.0');
   }
 
-
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -66,6 +66,7 @@ export default class SPSuperEditWebPart extends BaseClientSideWebPart<ISpsupered
                   multiSelect: false,
                   properties: this.properties,
                   context: this.context,
+                  // tslint:disable-next-line
                   onGetErrorMessage: null,
                   deferredValidationTime: 0,
                   key: 'listPickerFieldId'
@@ -76,10 +77,7 @@ export default class SPSuperEditWebPart extends BaseClientSideWebPart<ISpsupered
                   buttonType: PropertyPaneButtonType.Hero,
                   icon: 'Edit',
                   onClick: this.configureButtons.bind(this)
-                }),
-
-
-
+                })
               ]
             }
           ]
@@ -88,35 +86,32 @@ export default class SPSuperEditWebPart extends BaseClientSideWebPart<ISpsupered
     };
   }
 
-
-  private configureButtons() {
+  private configureButtons(): void {
     const dialog: FieldConfigDialog = new FieldConfigDialog();
     dialog.wpContext = this.context;
-
     dialog.fieldConfig = this.properties.fields;
-
     dialog.show().then(() => {
       try {
         this.properties.fields = dialog.fieldConfig;
-      } catch (e) { }
+      } catch (e) {
+        SPLogging.LogError('configureButtons', e.message);
+      }
     });
   }
 
-
-
+  // tslint:disable-next-line
   private onListChanged(propertyPath: string, oldValue: any, newValue: any) {
     let currentFields: ISPSuperField[] = [];
-    if (currentFields == undefined) {
+    if (currentFields === undefined) {
       currentFields = [];
     }
     SvcSuperFields.GetFields(this.context.pageContext.web.absoluteUrl, newValue).then(fields => {
       this.properties.listID = newValue;
       fields.forEach(fld => {
-        if (!SvcSuperFields.HasField(fld.title, currentFields) && this.properties.skipFields.indexOf(fld.name) == -1) {
+        if (!SvcSuperFields.HasField(fld.title, currentFields) && this.properties.skipFields.indexOf(fld.name) === -1) {
           currentFields.push(fld);
         }
       });
-
     });
     this.properties.fields = currentFields;
     this.render();

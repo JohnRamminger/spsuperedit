@@ -4,6 +4,6 @@ import { WebPartContext } from '@microsoft/sp-webpart-base';
 export interface ISPSuperFieldUserProps {
     mode: string;
     field: ISPSuperField;
-    ctx: WebPartContext
+    ctx: WebPartContext;
     value: string;
 }

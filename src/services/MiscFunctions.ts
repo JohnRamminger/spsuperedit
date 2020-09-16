@@ -5,7 +5,9 @@ import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 
 export class MiscFunctions {
   public static GetSearchUrl(debugMode: boolean, queryText: string, properties: string, rowLimit: number): string {
-    const retVal: string = MiscFunctions.GetWebAppUrl() + 'search/_api/search/query?rowlimit=' + rowLimit + '&querytext=%27'
+    const retVal: string = MiscFunctions.GetWebAppUrl()
+      + 'search/_api/search/query?rowlimit='
+      + rowLimit + '&querytext=%27'
       + queryText + '%27&selectproperties=%27' + properties + '%27';
     SPLogging.LogConsole(debugMode, 'GetSearcUrl', retVal);
     return retVal;
@@ -13,20 +15,22 @@ export class MiscFunctions {
   }
 
   public static GetQueryParameter(parm: string): string {
-    const queryParms: any = new UrlQueryParameterCollection(window.location.href);
+    // tslint:disable-next-line
+    const queryParms: UrlQueryParameterCollection = new UrlQueryParameterCollection(window.location.href);
     const myParm: string = queryParms.getValue(parm);
     return myParm;
   }
 
   public static GetItemID(): number {
-    let retVal: number = parseInt(this.GetQueryParameter('ID'));
+    // tslint:disable-next-line
+    const retVal: number = parseInt(this.GetQueryParameter('ID'));
     return retVal;
   }
 
   public static SetFieldValue(vals: ISPFieldInfo[], fld: ISPSuperField, value: string): ISPFieldInfo[] {
 
-    for (let index = 0; index < vals.length; index++) {
-      const item = vals[index];
+    for (let index: number = 0; index < vals.length; index++) {
+      const item: ISPFieldInfo = vals[index];
       if (item.name === fld.name) {
         item.value = value;
       }
@@ -36,7 +40,7 @@ export class MiscFunctions {
 
   public static GetCurrentValue(currentValues: ISPFieldInfo[], fieldName: string): string {
     currentValues.forEach(value => {
-      if (value.name == fieldName) {
+      if (value.name === fieldName) {
         return value.value;
       }
     });

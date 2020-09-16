@@ -1,11 +1,11 @@
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { autobind, TextField, Icon, IIconProps } from 'office-ui-fabric-react';
+import { Icon } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { ISPSuperField } from '../../models';
 import { IFieldConfigItemLookupProps, IFieldConfigItemLookupReactState } from '.';
 import styles from './FieldConfigItemLookup.module.scss';
-const editIcon: IIconProps = { iconName: 'Edit' };
-import { SPLogging } from '../../services';
+// const editIcon: IIconProps = { iconName: 'Edit' };
+// import { SPLogging } from '../../services';
 export class FieldConfigItemLookup extends React.Component<
   IFieldConfigItemLookupProps,
   IFieldConfigItemLookupReactState
@@ -13,7 +13,7 @@ export class FieldConfigItemLookup extends React.Component<
   constructor(props: IFieldConfigItemLookupProps) {
     super(props);
 
-    let bEdit: boolean = false;
+    const bEdit: boolean = false;
 
     this.state = {
       editmode: bEdit,
@@ -34,13 +34,6 @@ export class FieldConfigItemLookup extends React.Component<
     };
   }
 
-  private titleChange = e => {
-    this.setState({ title: e });
-  };
-
-  private visibleChange = (ev: React.FormEvent<HTMLElement>, isChecked: boolean) => {
-    this.setState({ visible: isChecked });
-  }
   public render(): React.ReactElement<IFieldConfigItemLookupProps> {
     if (this.state.editmode) {
       return (
@@ -99,8 +92,7 @@ export class FieldConfigItemLookup extends React.Component<
   }
 
   private saveItem(): void {
-
-    let fldItem: ISPSuperField = {
+    const fldItem: ISPSuperField = {
       name: this.state.name,
       title: this.state.title,
       type: this.state.type,
@@ -109,24 +101,31 @@ export class FieldConfigItemLookup extends React.Component<
       id: this.state.id,
       allowFillIn: false
     };
-
     this.props.submitItem(fldItem);
-
     this.setState({ editmode: false });
   }
 
-  private cancelItem() {
+  private cancelItem(): void {
     this.setState({ editmode: false });
   }
 
-  private deleteItem() {
+  private deleteItem(): void {
     this.props.remove(this.state.id);
   }
 
-  private editItem() {
+  private editItem(): void {
     this.setState({ editmode: true });
   }
 
-  @autobind
-  private _submit(id: number, selectedItem: ISPSuperField): void { }
+  // @autobind
+  // private _submit(id: number, selectedItem: ISPSuperField): void { }
+
+  // tslint:disable-next-line
+  private titleChange = e => {
+    this.setState({ title: e });
+  }
+
+  private visibleChange = (ev: React.FormEvent<HTMLElement>, isChecked: boolean) => {
+    this.setState({ visible: isChecked });
+  }
 }

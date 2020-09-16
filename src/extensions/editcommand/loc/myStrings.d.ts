@@ -5,5 +5,6 @@ declare interface IEditcommandCommandSetStrings {
 
 declare module 'EditcommandCommandSetStrings' {
   const strings: IEditcommandCommandSetStrings;
+  // tslint:disable-next-line
   export = strings;
 }

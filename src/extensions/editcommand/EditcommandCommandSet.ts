@@ -6,16 +6,7 @@ import {
   IListViewCommandSetListViewUpdatedParameters,
   IListViewCommandSetExecuteEventParameters
 } from '@microsoft/sp-listview-extensibility';
-import { Dialog } from '@microsoft/sp-dialog';
 
-import * as strings from 'EditcommandCommandSetStrings';
-import { PopupWindowPosition } from '@microsoft/sp-webpart-base/lib/propertyPane/propertyPaneFields/propertyPaneLink/IPropertyPaneLink';
-
-/**
- * If your command set uses the ClientSideComponentProperties JSON input,
- * it will be deserialized into the BaseExtension.properties object.
- * You can define an interface to describe it.
- */
 export interface IEditcommandCommandSetProperties {
   // This is an example; replace with your own properties
   sampleTextOne: string;

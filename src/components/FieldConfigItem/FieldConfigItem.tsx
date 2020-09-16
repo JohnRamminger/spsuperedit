@@ -1,22 +1,24 @@
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { autobind, TextField, Icon, IIconProps } from 'office-ui-fabric-react';
+import {
+  // autobind,
+  // TextField,
+  Icon
+  // IIconProps
+} from 'office-ui-fabric-react';
 import * as React from 'react';
 import { ISPSuperField } from '../../models';
 import { IFieldConfigItemProps, IFieldConfigItemReactState } from './';
 import styles from './FieldConfigItem.module.scss';
-const editIcon: IIconProps = { iconName: 'Edit' };
-import { SPLogging } from '../../services';
+// const editIcon: IIconProps = { iconName: 'Edit' };
+// import { SPLogging } from '../../services';
 export class FieldConfigItem extends React.Component<
   IFieldConfigItemProps,
   IFieldConfigItemReactState
   > {
   constructor(props: IFieldConfigItemProps) {
     super(props);
-
-    let bEdit: boolean = false;
-
     this.state = {
-      editmode: bEdit,
+      editmode: false,
       id: props.fieldItem.id,
       visible: true,
       title: props.fieldItem.title,
@@ -26,13 +28,6 @@ export class FieldConfigItem extends React.Component<
     };
   }
 
-  private titleChange = e => {
-    this.setState({ title: e });
-  };
-
-  private visibleChange = (ev: React.FormEvent<HTMLElement>, isChecked: boolean) => {
-    this.setState({ visible: isChecked });
-  }
   public render(): React.ReactElement<IFieldConfigItemProps> {
     if (this.state.editmode) {
       return (
@@ -86,9 +81,16 @@ export class FieldConfigItem extends React.Component<
     }
   }
 
-  private saveItem(): void {
+  // private titleChange = e => {
+  //   this.setState({ title: e });
+  // };
 
-    let fldItem: ISPSuperField = {
+  private visibleChange = (ev: React.FormEvent<HTMLElement>, isChecked: boolean) => {
+    this.setState({ visible: isChecked });
+  }
+
+  private saveItem(): void {
+    const fldItem: ISPSuperField = {
       name: this.state.name,
       title: this.state.title,
       type: this.state.type,
@@ -97,24 +99,22 @@ export class FieldConfigItem extends React.Component<
       id: this.state.id,
       allowFillIn: false
     };
-
     this.props.submitItem(fldItem);
-
     this.setState({ editmode: false });
   }
 
-  private cancelItem() {
+  private cancelItem(): void {
     this.setState({ editmode: false });
   }
 
-  private deleteItem() {
+  private deleteItem(): void {
     this.props.remove(this.state.id);
   }
 
-  private editItem() {
+  private editItem(): void {
     this.setState({ editmode: true });
   }
 
-  @autobind
-  private _submit(id: number, selectedItem: ISPSuperField): void { }
+  // @autobind
+  // private _submit(id: number, selectedItem: ISPSuperField): void { }
 }

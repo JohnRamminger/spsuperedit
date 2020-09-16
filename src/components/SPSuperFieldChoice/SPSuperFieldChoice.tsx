@@ -40,8 +40,6 @@ export class SPSuperFieldChoice extends React.Component<ISPSuperFieldChoiceProps
         return (<div>{field}</div>);
     }
 
-
-
     // tslint:disable-next-line
     private onComboChange = (e) => {
         this.props.changed(this.props.field, e.value);

@@ -1,4 +1,4 @@
-import { ISPSuperField } from "../../models";
+import { ISPSuperField } from '../../models';
 
 export interface IFieldConfigItemProps {
   fieldItem: ISPSuperField;

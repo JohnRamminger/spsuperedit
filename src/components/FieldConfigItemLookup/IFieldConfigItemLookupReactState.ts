@@ -1,4 +1,7 @@
-import { ISPSuperField, ISPSuperFieldLookupOptions } from "../../models";
+import {
+  // ISPSuperField,
+  ISPSuperFieldLookupOptions
+} from '../../models';
 
 export interface IFieldConfigItemLookupReactState {
   editmode: boolean;
