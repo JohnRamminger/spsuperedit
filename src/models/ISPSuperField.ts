@@ -1,3 +1,5 @@
+import { ISPSuperFieldLookupOptions } from './';
+
 export interface ISPSuperField {
     name: string;
     title: string;
@@ -6,4 +8,5 @@ export interface ISPSuperField {
     visible: boolean;
     required: boolean;
     allowFillIn: boolean;
+    fieldOptions?: ISPSuperFieldLookupOptions | undefined;
 }

@@ -2,15 +2,15 @@ import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { autobind, TextField, Icon, IIconProps } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { ISPSuperField } from '../../models';
-import { IFieldConfigItemProps, IFieldConfigItemReactState } from './';
-import styles from './FieldConfigItem.module.scss';
+import { IFieldConfigItemLookupProps, IFieldConfigItemLookupReactState } from '.';
+import styles from './FieldConfigItemLookup.module.scss';
 const editIcon: IIconProps = { iconName: 'Edit' };
 import { SPLogging } from '../../services';
-export class FieldConfigItem extends React.Component<
-  IFieldConfigItemProps,
-  IFieldConfigItemReactState
+export class FieldConfigItemLookup extends React.Component<
+  IFieldConfigItemLookupProps,
+  IFieldConfigItemLookupReactState
   > {
-  constructor(props: IFieldConfigItemProps) {
+  constructor(props: IFieldConfigItemLookupProps) {
     super(props);
 
     let bEdit: boolean = false;
@@ -22,7 +22,15 @@ export class FieldConfigItem extends React.Component<
       title: props.fieldItem.title,
       name: props.fieldItem.name,
       type: props.fieldItem.type,
-      required: props.fieldItem.required
+      required: props.fieldItem.required,
+      lookupOptions: {
+        field: '',
+        list: '',
+        allowmultiple: false,
+        lookupMode: '',
+        filterField: '',
+        filterValueField: ''
+      }
     };
   }
 
@@ -33,12 +41,14 @@ export class FieldConfigItem extends React.Component<
   private visibleChange = (ev: React.FormEvent<HTMLElement>, isChecked: boolean) => {
     this.setState({ visible: isChecked });
   }
-  public render(): React.ReactElement<IFieldConfigItemProps> {
+  public render(): React.ReactElement<IFieldConfigItemLookupProps> {
     if (this.state.editmode) {
       return (
         <div className={styles.row}>
-          <div>{this.state.title}</div>
-          <div>{this.state.type}</div>
+          <div className={styles.alignLeftMain}>{this.state.title}</div>
+          <div className={styles.alignLeftMain}>{this.state.type}</div>
+          <div className={styles.alignLeftMain}>List</div>
+          <div className={styles.alignLeftMain}>Field</div>
           <Checkbox label='Visible' checked={this.state.visible} onChange={this.visibleChange} />
 
           <Icon
@@ -64,6 +74,8 @@ export class FieldConfigItem extends React.Component<
           <div className={styles.alignLeftMain}>{this.state.title}</div>
           <div className={styles.alignLeftMain}>{this.state.type}</div>
 
+          <div className={styles.alignLeftMain}>List</div>
+          <div className={styles.alignLeftMain}>Field</div>
           <Icon
             className={styles.alignLeft}
             iconName='Edit'

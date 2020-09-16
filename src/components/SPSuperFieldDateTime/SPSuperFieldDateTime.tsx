@@ -3,7 +3,7 @@ import { ISPSuperFieldDateTimeProps } from '.';
 // import { escape } from '@microsoft/sp-lodash-subset';
 import {
     DatePicker
-    // DayOfWeek, IDatePickerStrings, mergeStyleSets 
+    // DayOfWeek, IDatePickerStrings, mergeStyleSets
 } from 'office-ui-fabric-react';
 
 export class SPSuperFieldDateTime extends React.Component<ISPSuperFieldDateTimeProps, {}> {

@@ -1,5 +1,7 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { SPLogging } from '.';
+import { ISPFieldInfo, ISPSuperField } from '../../lib/models';
+import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 
 export class MiscFunctions {
   public static GetSearchUrl(debugMode: boolean, queryText: string, properties: string, rowLimit: number): string {
@@ -8,6 +10,37 @@ export class MiscFunctions {
     SPLogging.LogConsole(debugMode, 'GetSearcUrl', retVal);
     return retVal;
 
+  }
+
+  public static GetQueryParameter(parm: string): string {
+    const queryParms: any = new UrlQueryParameterCollection(window.location.href);
+    const myParm: string = queryParms.getValue(parm);
+    return myParm;
+  }
+
+  public static GetItemID(): number {
+    let retVal: number = parseInt(this.GetQueryParameter('ID'));
+    return retVal;
+  }
+
+  public static SetFieldValue(vals: ISPFieldInfo[], fld: ISPSuperField, value: string): ISPFieldInfo[] {
+
+    for (let index = 0; index < vals.length; index++) {
+      const item = vals[index];
+      if (item.name === fld.name) {
+        item.value = value;
+      }
+    }
+    return vals;
+  }
+
+  public static GetCurrentValue(currentValues: ISPFieldInfo[], fieldName: string): string {
+    currentValues.forEach(value => {
+      if (value.name == fieldName) {
+        return value.value;
+      }
+    });
+    return '';
   }
 
   public static ReplaceIfPresent(

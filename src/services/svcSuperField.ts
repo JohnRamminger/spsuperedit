@@ -1,5 +1,5 @@
 import { Web, CamlQuery, FileFolderShared } from '@pnp/sp';
-import { ISPSuperField } from '../models';
+import { ISPSuperField, ISPSuperFieldLookupOptions } from '../models';
 
 // import * as Handlebars from 'handlebars';
 
@@ -8,11 +8,32 @@ export class SvcSuperFields {
     public static async GetFields(webUrl: string, listID: string): Promise<ISPSuperField[]> {
         let fields: ISPSuperField[] = [];
         let oWeb = new Web(webUrl);
-        await oWeb.lists.getById(listID).fields.select('Title,Internalname,Hidden,TypeAsString,Id,ReadOnlyField,Sealed,Required').get().then(flds => {
+        await oWeb.lists.getById(listID).fields.get().then(flds => {
+
+            // await oWeb.lists.getById(listID).fields.select('Title,Internalname,Hidden,TypeAsString,Id,ReadOnlyField,Sealed,Required').get().then(flds => {
             flds.forEach(async fld => {
                 if (!fld.Hidden && !fld.ReadOnlyField) {
 
                     const newField: ISPSuperField = { name: fld.InternalName, title: fld.Title, type: fld.TypeAsString, id: fld.Id, visible: true, required: fld.Required, allowFillIn: false };
+                    if (newField.type == 'Lookup' || newField.type == 'MultiLookup') {
+                        debugger;
+                        await oWeb.lists.getById(listID).fields.getById(fld.Id).get().then(fldDetails => {
+                            debugger;
+                            let lookupDetails: ISPSuperFieldLookupOptions = {
+                                allowmultiple: fldDetails.AllowMultipleValues,
+                                list: fldDetails.LookupList,
+                                field: fldDetails.LookupField,
+                                lookupMode: '',
+                                filterField: '',
+                                filterValueField: ''
+                            }
+                            newField.fieldOptions = lookupDetails;
+                        });
+
+
+                        debugger;
+
+                    }
                     fields.push(newField);
                 }
             });

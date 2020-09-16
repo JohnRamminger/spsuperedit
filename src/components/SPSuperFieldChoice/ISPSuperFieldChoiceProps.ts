@@ -7,4 +7,5 @@ export interface ISPSuperFieldChoiceProps {
     ctx: WebPartContext;
     listID: string;
     value: string;
+    changed: (fld: ISPSuperField, value: string) => void;
 }

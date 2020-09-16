@@ -111,8 +111,6 @@ export default class SPSuperEditWebPart extends BaseClientSideWebPart<ISpsupered
     }
     SvcSuperFields.GetFields(this.context.pageContext.web.absoluteUrl, newValue).then(fields => {
       this.properties.listID = newValue;
-
-
       fields.forEach(fld => {
         if (!SvcSuperFields.HasField(fld.title, currentFields) && this.properties.skipFields.indexOf(fld.name) == -1) {
           currentFields.push(fld);

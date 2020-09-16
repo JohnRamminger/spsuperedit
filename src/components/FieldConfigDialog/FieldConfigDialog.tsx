@@ -11,7 +11,7 @@ import {
 } from 'office-ui-fabric-react';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { FieldConfigItem } from '../FieldConfigItem';
+import { FieldConfigItem, FieldConfigItemLookup } from '../';
 import styles from './FieldConfigDialog.module.scss';
 import { IFieldConfigProps, IFieldConfigReactState } from './';
 import { MiscFunctions } from '../../services';
@@ -61,22 +61,37 @@ class FieldConfigDialogContent extends React.Component<
     const flds: JSX.Element[] = [];
 
     this.state.currentFields.forEach(field => {
-      // if (field.visible != false) 
-      {
-        flds.push(
-          <FieldConfigItem
-            fieldItem={field}
-            submitItem={this.saveSearchItem}
-            remove={this.removeItem}
-          ></FieldConfigItem>
-        );
+
+      switch (field.type) {
+        case 'Lookup':
+          flds.push(
+            <FieldConfigItemLookup
+              fieldItem={field}
+              submitItem={this.saveSearchItem}
+              remove={this.removeItem}
+            ></FieldConfigItemLookup>
+          );
+
+          break;
+
+        default:
+          flds.push(
+            <FieldConfigItem
+              fieldItem={field}
+              submitItem={this.saveSearchItem}
+              remove={this.removeItem}
+            ></FieldConfigItem>
+          );
+
+          break;
       }
+
     });
 
     return (
       <DialogContent
         className={styles.container}
-        title='Configure Search Buttons'
+        title='Configure Fields'
         subText=''
         onDismiss={this.props.close}
         showCloseButton={true}
