@@ -5,4 +5,5 @@ export interface ISPSuperFieldUserProps {
     mode: string;
     field: ISPSuperField;
     ctx: WebPartContext
+    value: string;
 }

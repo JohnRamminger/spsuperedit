@@ -5,4 +5,5 @@ export interface ISPSuperField {
     type: string;
     visible: boolean;
     required: boolean;
+    allowFillIn: boolean;
 }

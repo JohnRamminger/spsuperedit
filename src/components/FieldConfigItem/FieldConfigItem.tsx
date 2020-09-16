@@ -1,11 +1,11 @@
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { autobind, TextField, Icon, IIconProps } from "office-ui-fabric-react";
-import * as React from "react";
-import { ISPSuperField } from "../../models";
-import { IFieldConfigItemProps, IFieldConfigItemReactState } from "./";
+import { autobind, TextField, Icon, IIconProps } from 'office-ui-fabric-react';
+import * as React from 'react';
+import { ISPSuperField } from '../../models';
+import { IFieldConfigItemProps, IFieldConfigItemReactState } from './';
 import styles from './FieldConfigItem.module.scss';
-const editIcon: IIconProps = { iconName: "Edit" };
-import { SPLogging } from "../../services";
+const editIcon: IIconProps = { iconName: 'Edit' };
+import { SPLogging } from '../../services';
 export class FieldConfigItem extends React.Component<
   IFieldConfigItemProps,
   IFieldConfigItemReactState
@@ -31,7 +31,6 @@ export class FieldConfigItem extends React.Component<
   };
 
   private visibleChange = (ev: React.FormEvent<HTMLElement>, isChecked: boolean) => {
-    debugger;
     this.setState({ visible: isChecked });
   }
   public render(): React.ReactElement<IFieldConfigItemProps> {
@@ -40,18 +39,18 @@ export class FieldConfigItem extends React.Component<
         <div className={styles.row}>
           <div>{this.state.title}</div>
           <div>{this.state.type}</div>
-          <Checkbox label="Visible" checked={this.state.visible} onChange={this.visibleChange} />
+          <Checkbox label='Visible' checked={this.state.visible} onChange={this.visibleChange} />
 
           <Icon
             className={styles.alignLeftIcon}
-            iconName="Save"
+            iconName='Save'
             onClick={() => {
               this.saveItem();
             }}
           />
           <Icon
             className={styles.alignLeftIcon}
-            iconName="Cancel"
+            iconName='Cancel'
             onClick={() => {
               this.cancelItem();
             }}
@@ -67,7 +66,7 @@ export class FieldConfigItem extends React.Component<
 
           <Icon
             className={styles.alignLeft}
-            iconName="Edit"
+            iconName='Edit'
             onClick={() => {
               this.editItem();
             }}
@@ -75,7 +74,7 @@ export class FieldConfigItem extends React.Component<
 
           <Icon
             className={styles.alignLeft}
-            iconName="Trash"
+            iconName='Trash'
             onClick={() => {
               this.deleteItem();
             }}
@@ -88,14 +87,15 @@ export class FieldConfigItem extends React.Component<
   }
 
   private saveItem(): void {
-    debugger;
+
     let srchItem: ISPSuperField = {
       name: this.state.name,
       title: this.state.title,
       type: this.state.type,
       visible: this.state.visible,
       required: this.state.required,
-      id: this.state.id
+      id: this.state.id,
+      allowFillIn: false
     };
 
     this.props.submitItem(srchItem);

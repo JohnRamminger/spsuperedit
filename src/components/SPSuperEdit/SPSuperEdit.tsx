@@ -1,9 +1,9 @@
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 import * as React from 'react';
-import styles from '../../webparts/spsuperedit/components/Spsuperedit.module.scss';
+import styles from './Spsuperedit.module.scss';
 import { ISPSuperEditProps, ISPSuperEditReactState } from './';
 import { escape } from '@microsoft/sp-lodash-subset';
-import { SPSuperFieldText, SPSuperFieldDateTime, SPSuperFieldUser } from '../';
+import { SPSuperFieldText, SPSuperFieldDateTime, SPSuperFieldUser, SPSuperFieldChoice } from '../';
 
 export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEditReactState> {
 
@@ -24,14 +24,17 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
           switch (fld.type) {
             case 'Note':
             case 'Text':
-              fields.push(<SPSuperFieldText mode={this.state.mode} field={fld} />);
+              fields.push(<SPSuperFieldText value='' ctx={this.props.ctx} mode={this.state.mode} field={fld} />);
+              break;
+            case 'Choice':
+              fields.push(<SPSuperFieldChoice value='Rock' listID={this.props.listID} ctx={this.props.ctx} mode={this.state.mode} field={fld} />);
               break;
             case 'DateTime':
-              fields.push(<SPSuperFieldDateTime mode={this.state.mode} field={fld} />);
+              fields.push(<SPSuperFieldDateTime value='' mode={this.state.mode} field={fld} />);
               break;
             case 'User':
             case 'UserMulti':
-              fields.push(<SPSuperFieldUser ctx={this.props.ctx} mode={this.state.mode} field={fld} />);
+              fields.push(<SPSuperFieldUser value='' ctx={this.props.ctx} mode={this.state.mode} field={fld} />);
               break;
             default:
               fields.push(<h5>{fld.title + ' ' + fld.type}</h5>);

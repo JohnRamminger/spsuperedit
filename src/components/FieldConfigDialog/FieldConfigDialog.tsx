@@ -1,6 +1,6 @@
-import { BaseDialog, IDialogConfiguration } from "@microsoft/sp-dialog";
-import { WebPartContext } from "@microsoft/sp-webpart-base";
-import { ISPSuperField } from "../../models";
+import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog';
+import { WebPartContext } from '@microsoft/sp-webpart-base';
+import { ISPSuperField } from '../../models';
 
 import {
   autobind,
@@ -8,13 +8,13 @@ import {
   DialogContent,
   DialogFooter,
   PrimaryButton
-} from "office-ui-fabric-react";
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { FieldConfigItem } from "../FieldConfigItem";
-import styles from "./FieldConfigDialog.module.scss";
-import { IFieldConfigProps, IFieldConfigReactState } from "./";
-import { MiscFunctions } from "../../services";
+} from 'office-ui-fabric-react';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { FieldConfigItem } from '../FieldConfigItem';
+import styles from './FieldConfigDialog.module.scss';
+import { IFieldConfigProps, IFieldConfigReactState } from './';
+import { MiscFunctions } from '../../services';
 
 class FieldConfigDialogContent extends React.Component<
   IFieldConfigProps,
@@ -61,7 +61,8 @@ class FieldConfigDialogContent extends React.Component<
     const flds: JSX.Element[] = [];
 
     this.state.currentFields.forEach(field => {
-      if (field.visible != false) {
+      // if (field.visible != false) 
+      {
         flds.push(
           <FieldConfigItem
             fieldItem={field}
@@ -75,8 +76,8 @@ class FieldConfigDialogContent extends React.Component<
     return (
       <DialogContent
         className={styles.container}
-        title="Configure Search Buttons"
-        subText=""
+        title='Configure Search Buttons'
+        subText=''
         onDismiss={this.props.close}
         showCloseButton={true}
       >
@@ -89,10 +90,10 @@ class FieldConfigDialogContent extends React.Component<
             onClick={e => this.showDialog()}
           /> */}
 
-          <Button text="Cancel" title="Cancel" onClick={this.props.close} />
+          <Button text='Cancel' title='Cancel' onClick={this.props.close} />
           <PrimaryButton
-            text="OK"
-            title="OK"
+            text='OK'
+            title='OK'
             onClick={() => {
               this.clicked();
             }}
@@ -118,7 +119,7 @@ export class FieldConfigDialog extends BaseDialog {
     ReactDOM.render(
       <FieldConfigDialogContent
         close={this.close}
-        message={""}
+        message={''}
         fields={this.fieldConfig}
         submit={this._submit}
         refresh={this._refresh}

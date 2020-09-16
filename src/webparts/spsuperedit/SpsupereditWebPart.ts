@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
@@ -11,15 +10,11 @@ import {
 } from '@microsoft/sp-webpart-base';
 
 import { PropertyFieldListPicker, PropertyFieldListPickerOrderBy } from '@pnp/spfx-property-controls/lib/PropertyFieldListPicker';
-
-
 import * as strings from 'SpsupereditWebPartStrings';
 import { ISPSuperEditProps, SPSuperEdit, FieldConfigDialog } from '../../components';
 import { SvcSuperFields } from '../../services/svcSuperField';
 import { ISPSuperField } from '../../models';
 import { FileFolderShared } from '@pnp/sp';
-
-
 export interface ISpsupereditWebPartProps {
   listID: string;
   fields: ISPSuperField[];
@@ -38,7 +33,6 @@ export default class SPSuperEditWebPart extends BaseClientSideWebPart<ISpsupered
       }
 
     );
-
     ReactDom.render(element, this.domElement);
   }
 
@@ -56,11 +50,11 @@ export default class SPSuperEditWebPart extends BaseClientSideWebPart<ISpsupered
       pages: [
         {
           header: {
-            description: "This web part allows for the advanced editing of a SharePoint list"
+            description: 'This web part allows for the advanced editing of a SharePoint list'
           },
           groups: [
             {
-              groupName: "General Settings",
+              groupName: 'General Settings',
               groupFields: [
                 PropertyFieldListPicker('listid', {
                   label: 'Select a list',
@@ -76,11 +70,11 @@ export default class SPSuperEditWebPart extends BaseClientSideWebPart<ISpsupered
                   deferredValidationTime: 0,
                   key: 'listPickerFieldId'
                 }),
-                PropertyPaneTextField("skipFields", { label: 'Skip Fields' }),
-                PropertyPaneButton("configureFields", {
-                  text: "Configure Fields",
+                PropertyPaneTextField('skipFields', { label: 'Skip Fields' }),
+                PropertyPaneButton('configureFields', {
+                  text: 'Configure Fields',
                   buttonType: PropertyPaneButtonType.Hero,
-                  icon: "Edit",
+                  icon: 'Edit',
                   onClick: this.configureButtons.bind(this)
                 }),
 

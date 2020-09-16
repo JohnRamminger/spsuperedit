@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { PeoplePicker, PrincipalType } from "@pnp/spfx-controls-react/lib/PeoplePicker";
+import { PeoplePicker, PrincipalType } from '@pnp/spfx-controls-react/lib/PeoplePicker';
 import { ISPSuperFieldUserProps } from '.';
-import { escape } from '@microsoft/sp-lodash-subset';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+// import { escape } from '@microsoft/sp-lodash-subset';
+// import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 export class SPSuperFieldUser extends React.Component<ISPSuperFieldUserProps, {}> {
     public render(): React.ReactElement<ISPSuperFieldUserProps> {
         let userLimit: number = 1;
-        if (this.props.field.type === "UserMulti") {
+        if (this.props.field.type === 'UserMulti') {
             userLimit = 100;
         }
         return (
