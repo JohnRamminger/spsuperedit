@@ -1,4 +1,5 @@
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import {
   // autobind,
   // TextField,
@@ -21,6 +22,7 @@ export class FieldConfigItem extends React.Component<
       editmode: false,
       id: props.fieldItem.id,
       visible: true,
+      loadOrder: props.fieldItem.loadOrder,
       title: props.fieldItem.title,
       name: props.fieldItem.name,
       type: props.fieldItem.type,
@@ -34,7 +36,17 @@ export class FieldConfigItem extends React.Component<
         <div className={styles.row}>
           <div>{this.state.title}</div>
           <div>{this.state.type}</div>
+          <br />
+          <hr />
           <Checkbox label='Visible' checked={this.state.visible} onChange={this.visibleChange} />
+
+          <TextField
+            className={styles.width75}
+            defaultValue={this.state.loadOrder.toString()}
+            label={'Load Order'}
+            onChanged={this.orderChange}
+          />
+          <hr />
 
           <Icon
             className={styles.alignLeftIcon}
@@ -58,7 +70,7 @@ export class FieldConfigItem extends React.Component<
         <div className={styles.row}>
           <div className={styles.alignLeftMain}>{this.state.title}</div>
           <div className={styles.alignLeftMain}>{this.state.type}</div>
-
+          <div className={styles.alignLeftMain}>{this.state.loadOrder}</div>
           <Icon
             className={styles.alignLeft}
             iconName='Edit'
@@ -74,7 +86,6 @@ export class FieldConfigItem extends React.Component<
               this.deleteItem();
             }}
           />
-
           <div className={styles.alignClear}></div>
         </div>
       );
@@ -89,14 +100,22 @@ export class FieldConfigItem extends React.Component<
     this.setState({ visible: isChecked });
   }
 
+  private orderChange = (value: string) => {
+    // tslint:disable-next-line
+    const lo: number = parseInt(value);
+    this.setState({ loadOrder: lo });
+  }
+
   private saveItem(): void {
     const fldItem: ISPSuperField = {
+      listID: this.props.fieldItem.listID,
       name: this.state.name,
       title: this.state.title,
       type: this.state.type,
       visible: this.state.visible,
       required: this.state.required,
       id: this.state.id,
+      loadOrder: this.state.loadOrder,
       allowFillIn: false
     };
     this.props.submitItem(fldItem);

@@ -15,7 +15,7 @@ import {
 import { ISPSuperEditProps, SPSuperEdit, FieldConfigDialog } from '../../components';
 import { SvcSuperFields } from '../../services/svcSuperField';
 import { ISPSuperField } from '../../models';
-import { SPLogging } from '../../../lib/services';
+import { SPLogging, MiscFunctions } from '../../services';
 export interface ISpsupereditWebPartProps {
   listID: string;
   fields: ISPSuperField[];
@@ -100,17 +100,24 @@ export default class SPSuperEditWebPart extends BaseClientSideWebPart<ISpsupered
   }
 
   // tslint:disable-next-line
-  private onListChanged(propertyPath: string, oldValue: any, newValue: any) {
-    let currentFields: ISPSuperField[] = [];
-    if (currentFields === undefined) {
-      currentFields = [];
-    }
-    SvcSuperFields.GetFields(this.context.pageContext.web.absoluteUrl, newValue).then(fields => {
+  private async onListChanged(propertyPath: string, oldValue: any, newValue: any) {
+    const currentFields: ISPSuperField[] = [];
+    await SvcSuperFields.GetFields(this.context.pageContext.web.absoluteUrl, newValue).then(fields => {
       this.properties.listID = newValue;
+      let iLoadOrder: number = 0;
       fields.forEach(fld => {
-        if (!SvcSuperFields.HasField(fld.title, currentFields) && this.properties.skipFields.indexOf(fld.name) === -1) {
+        const bSkipField: boolean = MiscFunctions.GetSkipField(fld.name, this.properties.skipFields);
+        console.log(fld.name);
+        if (!SvcSuperFields.HasField(fld.title, currentFields)) {
+          if (bSkipField) {
+            fld.visible = false;
+          } else {
+            fld.visible = true;
+          }
+          fld.loadOrder = iLoadOrder;
           currentFields.push(fld);
         }
+        iLoadOrder++;
       });
     });
     this.properties.fields = currentFields;

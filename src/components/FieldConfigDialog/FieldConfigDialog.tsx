@@ -14,6 +14,7 @@ import * as ReactDOM from 'react-dom';
 import { FieldConfigItem, FieldConfigItemLookup } from '../';
 import styles from './FieldConfigDialog.module.scss';
 import { IFieldConfigProps, IFieldConfigReactState } from './';
+import { SvcSuperFields } from '../../services';
 // import { ISPFieldInfo } from '../../../lib/models';
 // import { MiscFunctions } from '../../services';
 // import { ISPFieldInfo } from '../../../lib/models';
@@ -25,17 +26,23 @@ class FieldConfigDialogContent extends React.Component<
   constructor(props: IFieldConfigProps) {
     super(props);
     // Default Color
+
     this.state = { currentFields: props.fields };
   }
 
   public render(): JSX.Element {
     const flds: JSX.Element[] = [];
+
+    this.state.currentFields.sort(SvcSuperFields.compareLoadOrder);
+
     this.state.currentFields.forEach(field => {
       switch (field.type) {
         case 'Lookup':
           flds.push(
             <FieldConfigItemLookup
+              ctx={this.props.ctx}
               fieldItem={field}
+              fields={this.props.fields}
               submitItem={this.saveSearchItem}
               remove={this.removeItem}
             ></FieldConfigItemLookup>
@@ -98,7 +105,7 @@ class FieldConfigDialogContent extends React.Component<
         workItems[i] = saveitem;
       }
     }
-
+    workItems.sort(SvcSuperFields.compareLoadOrder);
     this.setState({ currentFields: workItems });
   }
 
@@ -115,6 +122,7 @@ class FieldConfigDialogContent extends React.Component<
   }
 
   private clicked(): void {
+
     this.props.submit(this.state.currentFields);
   }
 
@@ -162,6 +170,7 @@ export class FieldConfigDialog extends BaseDialog {
 
   @autobind
   private _submit(currentFields: ISPSuperField[]): void {
+
     this.fieldConfig = currentFields;
     this.close();
   }

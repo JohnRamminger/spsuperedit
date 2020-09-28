@@ -7,5 +7,6 @@ export interface IFieldConfigItemReactState {
   title: string;
   type: string;
   name: string;
+  loadOrder: number;
   required: boolean;
 }

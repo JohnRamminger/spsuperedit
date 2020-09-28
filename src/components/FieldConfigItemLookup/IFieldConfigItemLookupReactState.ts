@@ -11,5 +11,8 @@ export interface IFieldConfigItemLookupReactState {
   type: string;
   name: string;
   required: boolean;
+  loadOrder: number;
+  currentListFields: string[];
+  sourceListFields: string[];
   lookupOptions: ISPSuperFieldLookupOptions;
 }

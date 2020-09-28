@@ -6,4 +6,5 @@ export interface ISPSuperFieldUserProps {
     field: ISPSuperField;
     ctx: WebPartContext;
     value: string;
+    changed: (fld: ISPSuperField, value: string) => void;
 }

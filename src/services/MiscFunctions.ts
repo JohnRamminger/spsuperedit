@@ -1,9 +1,23 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { SPLogging } from '.';
-import { ISPFieldInfo, ISPSuperField } from '../../lib/models';
+import { ISPFieldInfo, ISPSuperField } from '../models';
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 
 export class MiscFunctions {
+
+  public static Contains(inputString: string, searchValue: string): boolean {
+    return inputString.indexOf(searchValue) !== -1;
+  }
+  public static GetSkipField(fldName: string, strSkipFields: string): boolean {
+    const skipFields: string[] = strSkipFields.split(',');
+    skipFields.forEach(sf => {
+      if (fldName.toLowerCase() === sf.toLowerCase()) {
+        return true;
+      }
+    });
+    return false;
+  }
+
   public static GetSearchUrl(debugMode: boolean, queryText: string, properties: string, rowLimit: number): string {
     const retVal: string = MiscFunctions.GetWebAppUrl()
       + 'search/_api/search/query?rowlimit='
@@ -39,11 +53,13 @@ export class MiscFunctions {
   }
 
   public static GetCurrentValue(currentValues: ISPFieldInfo[], fieldName: string): string {
-    currentValues.forEach(value => {
-      if (value.name === fieldName) {
-        return value.value;
+    for (let index: number = 0; index < currentValues.length; index++) {
+      const item: ISPFieldInfo = currentValues[index];
+      if (item.name.toLowerCase() === fieldName.toLowerCase()) {
+        return item.value;
       }
-    });
+
+    }
     return '';
   }
 

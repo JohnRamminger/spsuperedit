@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { ISPSuperFieldChoiceProps, ISPSuperFieldChoiceReactState } from './';
+import { ISPSuperFieldCheckboxProps, ISPSuperFieldCheckboxReactState } from '.';
 // import { escape } from '@microsoft/sp-lodash-subset';
 import { Web } from '@pnp/sp';
 import styles from '../SPSuperEdit/Spsuperedit.module.scss';
-import Dropdown from 'react-dropdown';
+import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import 'react-dropdown/style.css';
 
-export class SPSuperFieldChoice extends React.Component<ISPSuperFieldChoiceProps, ISPSuperFieldChoiceReactState> {
-    constructor(props: ISPSuperFieldChoiceProps) {
+export class SPSuperFieldCheckbox extends React.Component<ISPSuperFieldCheckboxProps, ISPSuperFieldCheckboxReactState> {
+    constructor(props: ISPSuperFieldCheckboxProps) {
         super(props);
         // Default Color
         this.state = { choices: [], selectedItem: '' };
@@ -28,24 +28,21 @@ export class SPSuperFieldChoice extends React.Component<ISPSuperFieldChoiceProps
             });
     }
 
-    public render(): React.ReactElement<ISPSuperFieldChoiceProps> {
+    public render(): React.ReactElement<ISPSuperFieldCheckboxProps> {
         const field: JSX.Element[] = [];
         const selected: string[] = [];
         const bDisabled: boolean = this.props.mode === 'Display';
         selected.push(this.state.selectedItem);
 
-        field.push(<div className={styles.DropDownLabelStyle}>{this.props.field.title}</div>);
+        // field.push(<div className={styles.DropDownLabelStyle}>{this.props.field.title}</div>);
         field.push(
-            <Dropdown options={this.state.choices} disabled={bDisabled}
-                value={this.state.selectedItem}
-                onChange={this.onComboChange}
-                placeholder='Select an option' />);
+            <Checkbox label={this.props.field.title} onChange={this.onCheckboxChange} disabled={bDisabled} />);
         return (<div className={styles.fieldstyle}>{field}</div>);
     }
 
     // tslint:disable-next-line
-    private onComboChange = (e) => {
-        this.props.changed(this.props.field, e.value);
-        this.setState({ selectedItem: e.value });
+    private onCheckboxChange = (e) => {
+        // this.props.changed(this.props.field, e.value);
+        // this.setState({ selectedItem: e.value });
     }
 }

@@ -1,11 +1,14 @@
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+
 import { Icon } from 'office-ui-fabric-react';
 import * as React from 'react';
-import { ISPSuperField } from '../../models';
+import { ISPSuperField, ISPSuperFieldLookupOptions } from '../../models';
 import { IFieldConfigItemLookupProps, IFieldConfigItemLookupReactState } from '.';
 import styles from './FieldConfigItemLookup.module.scss';
-// const editIcon: IIconProps = { iconName: 'Edit' };
-// import { SPLogging } from '../../services';
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
+import { SvcSuperFields } from '../../../lib/services';
 export class FieldConfigItemLookup extends React.Component<
   IFieldConfigItemLookupProps,
   IFieldConfigItemLookupReactState
@@ -14,6 +17,11 @@ export class FieldConfigItemLookup extends React.Component<
     super(props);
 
     const bEdit: boolean = false;
+    const targetFields: string[] = [];
+    for (let i: number = 0; i < this.props.fields.length; i++) {
+      const fld: ISPSuperField = this.props.fields[i];
+      targetFields.push(fld.name);
+    }
 
     this.state = {
       editmode: bEdit,
@@ -23,15 +31,32 @@ export class FieldConfigItemLookup extends React.Component<
       name: props.fieldItem.name,
       type: props.fieldItem.type,
       required: props.fieldItem.required,
+      loadOrder: props.fieldItem.loadOrder,
+      currentListFields: targetFields,
+      sourceListFields: [],
+
       lookupOptions: {
-        field: '',
-        list: '',
+        field: this.props.fieldItem.fieldOptions.field,
+        list: this.props.fieldItem.fieldOptions.list,
         allowmultiple: false,
-        lookupMode: '',
-        filterField: '',
+        lookupMode: 'Nornal',
+        sourceFilterField: '',
         filterValueField: ''
       }
     };
+  }
+  // tslint:disable-next-line
+  public async componentDidMount() {
+    const sourceFields: string[] = [];
+
+    await SvcSuperFields.GetFields(this.props.ctx.pageContext.web.absoluteUrl,
+      this.props.fieldItem.fieldOptions.list).then(result => {
+        for (let index: number = 0; index < result.length; index++) {
+          const fld: ISPSuperField = result[index];
+          sourceFields.push(fld.name);
+        }
+      });
+    this.setState({ sourceListFields: sourceFields });
   }
 
   public render(): React.ReactElement<IFieldConfigItemLookupProps> {
@@ -40,10 +65,26 @@ export class FieldConfigItemLookup extends React.Component<
         <div className={styles.row}>
           <div className={styles.alignLeftMain}>{this.state.title}</div>
           <div className={styles.alignLeftMain}>{this.state.type}</div>
-          <div className={styles.alignLeftMain}>List</div>
-          <div className={styles.alignLeftMain}>Field</div>
+          <div className={styles.alignLeftMain}>{this.state.lookupOptions.list}</div>
+          <div className={styles.alignLeftMain}>{this.state.lookupOptions.field}</div>
+          <br />
+          <hr />
           <Checkbox label='Visible' checked={this.state.visible} onChange={this.visibleChange} />
-
+          <TextField
+            className={styles.width75}
+            defaultValue={this.state.loadOrder.toString()}
+            label={'Load Order'}
+            onChanged={this.orderChange}
+          />
+          <div className={styles.DropDownLabelStyle}>Target List Field</div>
+          <Dropdown options={this.state.currentListFields}
+            onChange={this.onTargetComboChange}
+            value={this.state.lookupOptions.filterValueField} />
+          <div className={styles.DropDownLabelStyle}>Source List Field</div>
+          <Dropdown options={this.state.sourceListFields}
+            onChange={this.onSourceComboChange}
+            value={this.state.lookupOptions.sourceFilterField} />
+          <hr />
           <Icon
             className={styles.alignLeftIcon}
             iconName='Save'
@@ -66,9 +107,7 @@ export class FieldConfigItemLookup extends React.Component<
         <div className={styles.row}>
           <div className={styles.alignLeftMain}>{this.state.title}</div>
           <div className={styles.alignLeftMain}>{this.state.type}</div>
-
-          <div className={styles.alignLeftMain}>List</div>
-          <div className={styles.alignLeftMain}>Field</div>
+          <div className={styles.alignLeftMain}>{this.state.loadOrder}</div>
           <Icon
             className={styles.alignLeft}
             iconName='Edit'
@@ -92,7 +131,11 @@ export class FieldConfigItemLookup extends React.Component<
   }
 
   private saveItem(): void {
+
     const fldItem: ISPSuperField = {
+      listID: this.props.fieldItem.listID,
+      fieldOptions: this.state.lookupOptions,
+      loadOrder: this.state.loadOrder,
       name: this.state.name,
       title: this.state.title,
       type: this.state.type,
@@ -101,6 +144,7 @@ export class FieldConfigItemLookup extends React.Component<
       id: this.state.id,
       allowFillIn: false
     };
+
     this.props.submitItem(fldItem);
     this.setState({ editmode: false });
   }
@@ -125,7 +169,28 @@ export class FieldConfigItemLookup extends React.Component<
     this.setState({ title: e });
   }
 
+  private orderChange = (value: string) => {
+    // tslint:disable-next-line
+    const lo: number = parseInt(value);
+    this.setState({ loadOrder: lo });
+  }
+
   private visibleChange = (ev: React.FormEvent<HTMLElement>, isChecked: boolean) => {
     this.setState({ visible: isChecked });
+  }
+  // tslint:disable-next-line
+  private onSourceComboChange = (e) => {
+
+    const lo: ISPSuperFieldLookupOptions = this.state.lookupOptions;
+    lo.sourceFilterField = e.value;
+    this.setState({ lookupOptions: lo });
+  }
+  // tslint:disable-next-line
+  private onTargetComboChange = (e) => {
+
+    const lo: ISPSuperFieldLookupOptions = this.state.lookupOptions;
+    lo.filterValueField = e.value;
+    this.setState({ lookupOptions: lo });
+
   }
 }

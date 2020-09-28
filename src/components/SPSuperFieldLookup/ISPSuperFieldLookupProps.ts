@@ -1,10 +1,13 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
-import { ISPSuperField } from '../../../lib/models';
 
-export interface ISPSuperFieldTextProps {
+import { ISPSuperField, ISPFieldChoiceValue } from '../../models';
+
+export interface ISPSuperFieldLookupProps {
     mode: string;
     field: ISPSuperField;
     ctx: WebPartContext;
+    listID: string;
     value: string;
+    choices: ISPFieldChoiceValue[];
     changed: (fld: ISPSuperField, value: string) => void;
 }

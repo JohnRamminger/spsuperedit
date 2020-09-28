@@ -1,5 +1,10 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
+.width75
+{
+  width:75px;
+  max-width: 75px;
+}
 .alignLeftMain {
   margin-right: 10px;
   margin-bottom: 2px;

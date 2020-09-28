@@ -3,6 +3,6 @@ export interface ISPSuperFieldLookupOptions {
     field: string;
     allowmultiple: boolean;
     lookupMode: string;
-    filterField: string;
+    sourceFilterField: string;
     filterValueField: string;
 }
