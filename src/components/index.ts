@@ -8,4 +8,5 @@ export * from './SPSuperFieldUser';
 export * from './SPSuperFieldDateTime';
 export * from './SPSuperFieldChoice';
 export * from './SPSuperFieldLookup';
+export * from './SPSuperFieldLookupFluent';
 export * from './SPSuperFieldCheckbox';

@@ -1,6 +1,6 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { SPLogging } from '.';
-import { ISPFieldInfo, ISPSuperField } from '../models';
+import { ISPFieldChoiceValue, ISPFieldInfo, ISPSuperField } from '../models';
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library';
 
 export class MiscFunctions {
@@ -42,11 +42,29 @@ export class MiscFunctions {
   }
 
   public static SetFieldValue(vals: ISPFieldInfo[], fld: ISPSuperField, value: string): ISPFieldInfo[] {
-
     for (let index: number = 0; index < vals.length; index++) {
       const item: ISPFieldInfo = vals[index];
       if (item.name === fld.name) {
         item.value = value;
+      }
+    }
+    return vals;
+  }
+
+  public static ClearDropDown(elementID: string) {
+    let dropDown = document.getElementById(elementID);
+    let dropDownValue = document.getElementById(elementID + '-option');
+    dropDownValue.innerText = '';
+  }
+
+  public static SetFieldChoices(vals: ISPFieldInfo[],
+    fld: ISPSuperField,
+    choices: ISPFieldChoiceValue[]): ISPFieldInfo[] {
+    for (let index: number = 0; index < vals.length; index++) {
+      const item: ISPFieldInfo = vals[index];
+      if (item.name === fld.name) {
+        item.choices = choices;
+
       }
     }
     return vals;

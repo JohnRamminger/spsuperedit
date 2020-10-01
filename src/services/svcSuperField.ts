@@ -50,7 +50,7 @@ export class SvcSuperFields {
                 switch (fld.type) {
                     case 'LookupMulti':
                     case 'Lookup':
-                        strSelect += fld.name + '/Title,';
+                        strSelect += fld.name + '/Title,' + fld.name + '/Id,';
                         strExpand += fld.name + ',';
                         break;
                     case 'UserMulti':
@@ -71,7 +71,6 @@ export class SvcSuperFields {
         requestUrl += '?$filter=ID eq ' + itemID;
         requestUrl += '&$select=' + strSelect;
         requestUrl += '&$expand=' + strExpand;
-
         return requestUrl;
     }
 

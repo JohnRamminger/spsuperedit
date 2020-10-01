@@ -5,6 +5,7 @@ import styles from '../SPSuperEdit/Spsuperedit.module.scss';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import { ISPFieldChoiceValue } from '../../models';
+import { MiscFunctions } from '../../services';
 export class SPSuperFieldLookup extends React.Component<ISPSuperFieldLookupProps, ISPSuperFieldLookupReactState> {
     constructor(props: ISPSuperFieldLookupProps) {
         super(props);
@@ -36,24 +37,33 @@ export class SPSuperFieldLookup extends React.Component<ISPSuperFieldLookupProps
         }
         if (this.props) {
             this.props.choices.forEach(choice => {
-                choices.push(choice.value);
+                choices.push(choice.text);
             });
+
         }
         selected.push(this.state.selectedItem);
+
         field.push(<div className={styles.DropDownLabelStyle}>{this.props.field.title}</div>);
         field.push(
             <Dropdown options={choices}
                 disabled={bDisabled}
                 value={strValue}
+                onFocus={this.handleFocus}
                 onChange={this.onLookupChange}
                 placeholder='Select an option' />);
         return (<div className={styles.fieldstyle} >{field}</div>);
     }
 
+    handleFocus = (event) => {
+        this.setState({ selectedItem: '' });
+    }
+
+
+
     private GetLookupID(value: string): string {
         for (let index: number = 0; index < this.props.choices.length; index++) {
             const choice: ISPFieldChoiceValue = this.props.choices[index];
-            if (choice.value === value) {
+            if (choice.text === value) {
                 return choice.key;
             }
         }

@@ -8,6 +8,7 @@ import {
   SPSuperFieldText,
   SPSuperFieldDateTime,
   SPSuperFieldLookup,
+  SPSuperFieldLookupFluent,
   SPSuperFieldUser,
   SPSuperFieldChoice,
   SPSuperFieldCheckbox
@@ -26,6 +27,9 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
       mode: 'Edit',
       currentValues: []
     };
+  }
+  public GetLookupValue(item: any, fieldName: string): string {
+    return item[fieldName]['Id'] + '|' + item[fieldName]['Title'];
   }
 
   // tslint:disable-next-line
@@ -49,6 +53,9 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
       });
       fieldInfo.forEach(fld => {
         fld = this.GetFieldValue(item, fld);
+        if (fld.type == 'Lookup') {
+          fld.value = this.GetLookupValue(item, fld.name);
+        }
       });
       for (let i: number = 0; i < this.props.fields.length; i++) {
         const fld: ISPSuperField = this.props.fields[i];
@@ -62,6 +69,7 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
             const fi: ISPFieldInfo = fieldInfo[x];
             if (fi.name === fld.name) {
               fi.choices = choices;
+
             }
           }
         }
@@ -116,7 +124,7 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
                   choices = currentField.choices;
                 }
               }
-              fields.push(<SPSuperFieldLookup
+              fields.push(<SPSuperFieldLookupFluent
                 changed={this.lookupColumnChanged}
                 value={currentValue}
                 choices={choices}
@@ -185,17 +193,38 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
     this.setState({ currentValues: vals });
   }
 
+  private GetSuperFieldByName(fldName: string): ISPSuperField {
+    for (let i = 0; i < this.props.fields.length; i++) {
+      const fld = this.props.fields[i];
+      if (fld.name == fldName) {
+        return fld;
+      }
+    }
+    return undefined;
+  }
+
   private lookupColumnChanged = (fld: ISPSuperField, value: string) => {
     let vals: ISPFieldInfo[] = this.state.currentValues;
-    vals = MiscFunctions.SetFieldValue(vals, fld, value);
-    this.setState({ currentValues: vals });
+
+    let strValue = value.substring(value.indexOf('|') + 1);
+    vals = MiscFunctions.SetFieldValue(vals, fld, strValue);
+
     const filterFields: string[] = this.GetLookupFilter(fld.name);
     for (let i = 0; i < filterFields.length; i++) {
-      const fld = filterFields[i];
-      debugger;
+      const filterField = filterFields[i];
+
+      let workField: ISPSuperField = this.GetSuperFieldByName(filterField);
+      this.GetLookupChoices(this.props.ctx.pageContext.web.absoluteUrl, workField, value).then(results => {
+        vals = MiscFunctions.SetFieldChoices(vals, workField, results);
+        vals = MiscFunctions.SetFieldValue(vals, workField, '');
+
+        MiscFunctions.ClearDropDown('lu' + workField.name);
+        this.setState({ currentValues: vals });
+      });
     }
   }
 
+  // tslint:disable-next-line
   private GetLookupFilter = (fldName: string): string[] => {
     const filterFields: string[] = [];
     for (let index: number = 0; index < this.props.fields.length; index++) {
@@ -258,28 +287,39 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
     fldChoices: ISPSuperField,
     filterValue: string): Promise<ISPFieldChoiceValue[]> {
     const choices: ISPFieldChoiceValue[] = [];
-    const lookupOptions: ISPSuperFieldLookupOptions = fldChoices.fieldOptions;
-    const oWeb: Web = new Web(webUrl);
-    const fields: string = lookupOptions.field + ', Id';
-    debugger;
-    if (!MiscFunctions.IsEmpty(filterValue)) {
-      await oWeb.lists.getById(lookupOptions.list).items.select(fields).top(5000).get().then(items => {
-        for (let i: number = 0; i < items.length; i++) {
-          // tslint:disable-next-line
-          const item = items[i];
-          const choice: ISPFieldChoiceValue = { key: item.Id, value: item[lookupOptions.field] };
-          choices.push(choice);
-        }
-      });
-    } else {
-      await oWeb.lists.getById(lookupOptions.list).items.select(fields).top(5000).get().then(items => {
-        for (let i: number = 0; i < items.length; i++) {
-          // tslint:disable-next-line
-          const item = items[i];
-          const choice: ISPFieldChoiceValue = { key: item.Id, value: item[lookupOptions.field] };
-          choices.push(choice);
-        }
-      });
+    choices.push({ key: '', text: '' })
+    if (fldChoices.fieldOptions) {
+      const lookupOptions: ISPSuperFieldLookupOptions = fldChoices.fieldOptions;
+      const oWeb: Web = new Web(webUrl);
+      if (!MiscFunctions.IsEmpty(filterValue)) {
+
+        const fields: string = lookupOptions.field + ',' + lookupOptions.filterValueField + '/Title' + ', Id';
+        let cFilterValue: string = filterValue.substring(filterValue.indexOf('|') + 1);
+        await oWeb.lists.getById(lookupOptions.list).items.select(fields).expand(lookupOptions.filterValueField).top(5000).get().then(items => {
+
+          for (let i: number = 0; i < items.length; i++) {
+            // tslint:disable-next-line
+            const item = items[i];
+            const value = item[lookupOptions.filterValueField]['Title'];
+
+            if (value === cFilterValue) {
+              const choice: ISPFieldChoiceValue = { key: item.Id, text: item[lookupOptions.field] };
+              choices.push(choice);
+
+            }
+          }
+        });
+      } else {
+        const fields: string = lookupOptions.field + ', Id';
+        await oWeb.lists.getById(lookupOptions.list).items.select(fields).top(5000).get().then(items => {
+          for (let i: number = 0; i < items.length; i++) {
+            // tslint:disable-next-line
+            const item = items[i];
+            const choice: ISPFieldChoiceValue = { key: item.Id, text: item[lookupOptions.field] };
+            choices.push(choice);
+          }
+        });
+      }
     }
     return new Promise<ISPFieldChoiceValue[]>(
       // tslint:disable-next-line
