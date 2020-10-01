@@ -42,7 +42,8 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
         fieldInfo.push({ name: fld.name, value: '', initialValue: '', type: fld.type, choices: [] });
       }
     }
-    const itemID: number = MiscFunctions.GetItemID();
+    let itemID: number = MiscFunctions.GetItemID();
+
     if (itemID !== 0) {
       const requestUrl: string =
         SvcSuperFields.GetItemRequestUrl(this.props.ctx, this.props.fields, this.props.listID, itemID);
@@ -69,6 +70,25 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
             const fi: ISPFieldInfo = fieldInfo[x];
             if (fi.name === fld.name) {
               fi.choices = choices;
+
+            }
+          }
+        }
+      }
+      this.setState({ currentValues: fieldInfo });
+    } else {
+      for (let y: number = 0; y < this.props.fields.length; y++) {
+        const fld: ISPSuperField = this.props.fields[y];
+        if (fld.type.indexOf('Lookup') > -1) {
+
+          let lookupchoices: ISPFieldChoiceValue[] = [];
+          await this.GetLookupChoices(this.props.ctx.pageContext.web.absoluteUrl, fld, '').then(result => {
+            lookupchoices = result;
+          });
+          for (let x: number = 0; x < fieldInfo.length; x++) {
+            const fi: ISPFieldInfo = fieldInfo[x];
+            if (fi.name === fld.name) {
+              fi.choices = lookupchoices;
 
             }
           }

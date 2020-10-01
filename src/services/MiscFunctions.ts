@@ -37,7 +37,10 @@ export class MiscFunctions {
 
   public static GetItemID(): number {
     // tslint:disable-next-line
-    const retVal: number = parseInt(this.GetQueryParameter('ID'));
+    const retVal: number = parseInt(this.GetQueryParameter('ID'), 10);
+    if (isNaN(retVal)) {
+      return 0;
+    }
     return retVal;
   }
 
