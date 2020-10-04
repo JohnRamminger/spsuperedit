@@ -94,10 +94,8 @@ export default class SPSuperEditWebPart extends BaseClientSideWebPart<ISpsupered
     const dialog: FieldConfigDialog = new FieldConfigDialog();
     dialog.wpContext = this.context;
     dialog.fieldConfig = this.properties.fields;
-    debugger;
     dialog.show().then(() => {
       try {
-        debugger;
         this.properties.fields = dialog.fieldConfig;
       } catch (e) {
         SPLogging.LogError('configureButtons', e.message);

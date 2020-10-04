@@ -32,10 +32,10 @@ class FieldConfigDialogContent extends React.Component<
 
   public render(): JSX.Element {
     const flds: JSX.Element[] = [];
-
     this.state.currentFields.sort(SvcSuperFields.compareLoadOrder);
 
-    this.state.currentFields.forEach(field => {
+    for (let i: number = 0; i < this.state.currentFields.length; i++) {
+      const field: ISPSuperField = this.state.currentFields[i];
       switch (field.type) {
         case 'Lookup':
           flds.push(
@@ -62,7 +62,7 @@ class FieldConfigDialogContent extends React.Component<
           break;
       }
 
-    });
+    }
 
     return (
       <DialogContent

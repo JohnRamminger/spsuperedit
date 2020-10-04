@@ -1,5 +1,13 @@
 @import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
 
+.alignRightButton
+{
+  float:right;
+  margin-right:10px;
+}
+.clearFloat {
+  clear:both;
+}
 
 .DropDownLabelStyle {
   font-family: "Segoe UI Web (West European)",Segoe UI,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif;

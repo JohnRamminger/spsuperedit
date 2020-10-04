@@ -15,7 +15,6 @@ export class FieldConfigItemLookup extends React.Component<
   > {
   constructor(props: IFieldConfigItemLookupProps) {
     super(props);
-
     const bEdit: boolean = false;
     const targetFields: string[] = [];
     for (let i: number = 0; i < this.props.fields.length; i++) {
@@ -40,8 +39,8 @@ export class FieldConfigItemLookup extends React.Component<
         list: this.props.fieldItem.fieldOptions.list,
         allowmultiple: false,
         lookupMode: 'Nornal',
-        sourceFilterField: '',
-        filterValueField: ''
+        sourceFilterField: this.props.fieldItem.fieldOptions.sourceFilterField,
+        filterValueField: this.props.fieldItem.fieldOptions.filterValueField
       }
     };
   }
@@ -61,6 +60,8 @@ export class FieldConfigItemLookup extends React.Component<
 
   public render(): React.ReactElement<IFieldConfigItemLookupProps> {
     if (this.state.editmode) {
+      // console.log('FilterField:' + this.state.lookupOptions.filterValueField);
+      // console.log('SourceField:' + this.state.lookupOptions.sourceFilterField);
       return (
         <div className={styles.row}>
           <div className={styles.alignLeftMain}>{this.state.title}</div>

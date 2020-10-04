@@ -37,7 +37,7 @@ export class MiscFunctions {
 
   public static GetItemID(): number {
     // tslint:disable-next-line
-    const retVal: number = parseInt(this.GetQueryParameter('ID'), 10);
+    const retVal: number = parseInt(this.GetQueryParameter('ItemID'), 10);
     if (isNaN(retVal)) {
       return 0;
     }
@@ -54,9 +54,8 @@ export class MiscFunctions {
     return vals;
   }
 
-  public static ClearDropDown(elementID: string) {
-    let dropDown = document.getElementById(elementID);
-    let dropDownValue = document.getElementById(elementID + '-option');
+  public static ClearDropDown(elementID: string): void {
+    const dropDownValue: HTMLElement = document.getElementById(elementID + '-option');
     dropDownValue.innerText = '';
   }
 

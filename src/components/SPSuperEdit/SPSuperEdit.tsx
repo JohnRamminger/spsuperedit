@@ -1,4 +1,5 @@
 import { Placeholder } from '@pnp/spfx-controls-react/lib/Placeholder';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { Web } from '@pnp/sp';
 import styles from './Spsuperedit.module.scss';
@@ -7,7 +8,7 @@ import { ISPFieldChoiceValue, ISPFieldInfo, ISPSuperFieldLookupOptions } from '.
 import {
   SPSuperFieldText,
   SPSuperFieldDateTime,
-  SPSuperFieldLookup,
+  // SPSuperFieldLookup,
   SPSuperFieldLookupFluent,
   SPSuperFieldUser,
   SPSuperFieldChoice,
@@ -28,7 +29,10 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
       currentValues: []
     };
   }
+
+  // tslint:disable-next-line
   public GetLookupValue(item: any, fieldName: string): string {
+    // tslint:disable-next-line
     return item[fieldName]['Id'] + '|' + item[fieldName]['Title'];
   }
 
@@ -42,7 +46,7 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
         fieldInfo.push({ name: fld.name, value: '', initialValue: '', type: fld.type, choices: [] });
       }
     }
-    let itemID: number = MiscFunctions.GetItemID();
+    const itemID: number = MiscFunctions.GetItemID();
 
     if (itemID !== 0) {
       const requestUrl: string =
@@ -54,7 +58,7 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
       });
       fieldInfo.forEach(fld => {
         fld = this.GetFieldValue(item, fld);
-        if (fld.type == 'Lookup') {
+        if (fld.type === 'Lookup') {
           fld.value = this.GetLookupValue(item, fld.name);
         }
       });
@@ -176,10 +180,18 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
 
         }
       });
+      const toolbarMarkup: JSX.Element[] = [];
+      toolbarMarkup.push(<div>
+        <DefaultButton className={styles.alignRightButton} text='Cancel' />
+        <PrimaryButton className={styles.alignRightButton} text='Save' />
+
+        <div className={styles.clearFloat} />
+      </div>);
       return (
         <div className={styles.spsuperedit} >
+          {toolbarMarkup}
           {fields}
-
+          {toolbarMarkup}
         </div >
       );
     } else {
@@ -214,9 +226,9 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
   }
 
   private GetSuperFieldByName(fldName: string): ISPSuperField {
-    for (let i = 0; i < this.props.fields.length; i++) {
-      const fld = this.props.fields[i];
-      if (fld.name == fldName) {
+    for (let i: number = 0; i < this.props.fields.length; i++) {
+      const fld: ISPSuperField = this.props.fields[i];
+      if (fld.name === fldName) {
         return fld;
       }
     }
@@ -226,14 +238,15 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
   private lookupColumnChanged = (fld: ISPSuperField, value: string) => {
     let vals: ISPFieldInfo[] = this.state.currentValues;
 
-    let strValue = value.substring(value.indexOf('|') + 1);
+    const strValue: string = value.substring(value.indexOf('|') + 1);
     vals = MiscFunctions.SetFieldValue(vals, fld, strValue);
 
     const filterFields: string[] = this.GetLookupFilter(fld.name);
-    for (let i = 0; i < filterFields.length; i++) {
+    for (let i: number = 0; i < filterFields.length; i++) {
+      // tslint:disable-next-line
       const filterField = filterFields[i];
 
-      let workField: ISPSuperField = this.GetSuperFieldByName(filterField);
+      const workField: ISPSuperField = this.GetSuperFieldByName(filterField);
       this.GetLookupChoices(this.props.ctx.pageContext.web.absoluteUrl, workField, value).then(results => {
         vals = MiscFunctions.SetFieldChoices(vals, workField, results);
         vals = MiscFunctions.SetFieldValue(vals, workField, '');
@@ -250,8 +263,8 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
     for (let index: number = 0; index < this.props.fields.length; index++) {
       const fld: ISPSuperField = this.props.fields[index];
       if (fld.type === 'Lookup') {
-        let fo: ISPSuperFieldLookupOptions = fld.fieldOptions;
-        let strField: string = fo.filterValueField.toString();
+        const fo: ISPSuperFieldLookupOptions = fld.fieldOptions;
+        const strField: string = fo.filterValueField.toString();
         if (strField === fldName) {
           filterFields.push(fld.name);
         }
@@ -307,28 +320,30 @@ export class SPSuperEdit extends React.Component<ISPSuperEditProps, ISPSuperEdit
     fldChoices: ISPSuperField,
     filterValue: string): Promise<ISPFieldChoiceValue[]> {
     const choices: ISPFieldChoiceValue[] = [];
-    choices.push({ key: '', text: '' })
+    choices.push({ key: '', text: '' });
     if (fldChoices.fieldOptions) {
       const lookupOptions: ISPSuperFieldLookupOptions = fldChoices.fieldOptions;
       const oWeb: Web = new Web(webUrl);
       if (!MiscFunctions.IsEmpty(filterValue)) {
 
         const fields: string = lookupOptions.field + ',' + lookupOptions.filterValueField + '/Title' + ', Id';
-        let cFilterValue: string = filterValue.substring(filterValue.indexOf('|') + 1);
-        await oWeb.lists.getById(lookupOptions.list).items.select(fields).expand(lookupOptions.filterValueField).top(5000).get().then(items => {
+        const cFilterValue: string = filterValue.substring(filterValue.indexOf('|') + 1);
+        await oWeb.lists.getById(lookupOptions.list).items.select(fields).
+          expand(lookupOptions.filterValueField).top(5000).get().then(items => {
 
-          for (let i: number = 0; i < items.length; i++) {
-            // tslint:disable-next-line
-            const item = items[i];
-            const value = item[lookupOptions.filterValueField]['Title'];
+            for (let i: number = 0; i < items.length; i++) {
+              // tslint:disable-next-line
+              const item = items[i];
+              // tslint:disable-next-line
+              const value: string = item[lookupOptions.filterValueField]['Title'];
 
-            if (value === cFilterValue) {
-              const choice: ISPFieldChoiceValue = { key: item.Id, text: item[lookupOptions.field] };
-              choices.push(choice);
+              if (value === cFilterValue) {
+                const choice: ISPFieldChoiceValue = { key: item.Id, text: item[lookupOptions.field] };
+                choices.push(choice);
 
+              }
             }
-          }
-        });
+          });
       } else {
         const fields: string = lookupOptions.field + ', Id';
         await oWeb.lists.getById(lookupOptions.list).items.select(fields).top(5000).get().then(items => {
